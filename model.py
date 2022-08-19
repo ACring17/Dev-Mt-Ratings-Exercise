@@ -56,9 +56,20 @@ class Rating(db.Model):
     rating_id = db.Column(db.Integer,
                         autoincrement=True,
                         primary_key=True)
-    movie_id = db.Column(db.Integer)
-    user_id = db.Column(db.Integer)
+    movie_id = db.Column(db.Integer,
+                        db.ForeignKey('movies.movie_id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user.id'))
     score = db.Column(db.Integer)
+
+    # Relation to user
+    user = db.relationship("User",
+                        backref=db.backref("ratings",
+                                        order_by=rating_id))
+
+    # Relation to movie
+    movie = db.relationship("Movie",
+                            backref=db.backref("ratings",
+                                            order_by=rating_id))
 
     def __repr__(self):
         """Helpful feedback when printed"""
